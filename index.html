@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Lost and Found - Smart Campus Solution</title>
+    <style>
+        /* General Styles */
+        body {
+            font-family: 'Arial', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #121212;
+            color: #e0e0e0;
+        }
+
+        header {
+            background-color: #1f1f1f;
+            color: #4CAF50;
+            padding: 20px 0;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+        }
+
+        header h1 {
+            margin: 0;
+            font-size: 2.5rem;
+        }
+
+        .container {
+            max-width: 1200px;
+            margin: 20px auto;
+            padding: 20px;
+            background-color: #1f1f1f;
+            border-radius: 8px;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.2);
+        }
+
+        h2 {
+            color: #4CAF50;
+            margin-bottom: 20px;
+        }
+
+        .form-section {
+            margin-bottom: 40px;
+        }
+
+        .form-section h3 {
+            color: #4CAF50;
+            margin-bottom: 15px;
+        }
+
+        .form-section input,
+        .form-section textarea,
+        .form-section button {
+            width: 100%;
+            padding: 10px;
+            margin-bottom: 15px;
+            border: 1px solid #333;
+            border-radius: 4px;
+            background-color: #2d2d2d;
+            color: #e0e0e0;
+            font-size: 1rem;
+        }
+
+        .form-section input::placeholder,
+        .form-section textarea::placeholder {
+            color: #888;
+        }
+
+        .form-section button {
+            background-color: #4CAF50;
+            color: white;
+            border: none;
+            cursor: pointer;
+            transition: background-color 0.3s ease;
+        }
+
+        .form-section button:hover {
+            background-color: #45a049;
+        }
+
+        .results {
+            margin-top: 20px;
+        }
+
+        .item-card {
+            display: flex;
+            align-items: center;
+            gap: 20px;
+            padding: 15px;
+            border: 1px solid #333;
+            border-radius: 8px;
+            margin-bottom: 10px;
+            background-color: #2d2d2d;
+        }
+
+        .item-card img {
+            width: 100px;
+            height: 100px;
+            object-fit: cover;
+            border-radius: 8px;
+        }
+
+        .item-card h4 {
+            margin: 0;
+            font-size: 1.2rem;
+            color: #4CAF50;
+        }
+
+        .item-card p {
+            margin: 5px 0;
+            color: #e0e0e0;
+        }
+
+        footer {
+            text-align: center;
+            padding: 20px 0;
+            background-color: #1f1f1f;
+            color: #888;
+            margin-top: 40px;
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>Lost and Found - Smart Campus Solution</h1>
+    </header>
+    <div class="container">
+        <!-- Report Lost Item Section -->
+        <section class="form-section">
+            <h2>Report Lost Item</h2>
+            <form id="lostForm">
+                <input type="text" placeholder="Item Name" required>
+                <input type="date" required>
+                <input type="text" placeholder="Location" required>
+                <textarea placeholder="Description" rows="4" required></textarea>
+                <input type="file" accept="image/*" required>
+                <button type="submit">Report Lost Item</button>
+            </form>
+        </section>
+
+        <!-- Report Found Item Section -->
+        <section class="form-section">
+            <h2>Report Found Item</h2>
+            <form id="foundForm">
+                <input type="text" placeholder="Item Name" required>
+                <input type="date" required>
+                <input type="text" placeholder="Location" required>
+                <textarea placeholder="Description" rows="4" required></textarea>
+                <input type="file" accept="image/*" required>
+                <button type="submit">Report Found Item</button>
+            </form>
+        </section>
+
+        <!-- Search Results Section -->
+        <section class="results">
+            <h2>Search Results</h2>
+            <div id="resultsContainer">
+                <!-- Example Item Card -->
+                <div class="item-card">
+                    <img src="https://via.placeholder.com/100" alt="Found Item">
+                    <div>
+                        <h4>Black Wallet</h4>
+                        <p><strong>Found on:</strong> 2023-10-15</p>
+                        <p><strong>Location:</strong> Library</p>
+                        <p><strong>Description:</strong> A black leather wallet with a student ID inside.</p>
+                    </div>
+                </div>
+                <!-- More items will be dynamically added here -->
+            </div>
+        </section>
+    </div>
+    <footer>
+        <p>&copy; 2023 Smart Campus Solution. All rights reserved.</p>
+    </footer>
+
+    <script>
+        // JavaScript for handling form submissions and AI-powered matching (placeholder)
+        document.getElementById('lostForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+            alert('Lost item reported! Our AI system will notify you if a match is found.');
+        });
+
+        document.getElementById('foundForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+            alert('Found item reported! Our AI system will check for matches.');
+        });
+    </script>
+</body>
+</html>

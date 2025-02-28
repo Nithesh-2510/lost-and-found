@@ -1,0 +1,115 @@
+import tensorflow as tf
+from tensorflow.keras import layers, models
+from tensorflow.keras.preprocessing.image import ImageDataGenerator
+import matplotlib.pyplot as plt
+
+# Step 1: Prepare the Dataset
+# Assume you have a dataset of images in folders like:
+# dataset/
+#   ├── wallet/
+#   ├── keys/
+#   ├── phone/
+#   └── bag/
+
+dataset_dir = "dataset"  # Path to your dataset
+img_height, img_width = 150, 150  # Image dimensions
+batch_size = 32
+
+# Data Augmentation and Preprocessing
+train_datagen = ImageDataGenerator(
+    rescale=1.0 / 255,  # Normalize pixel values
+    rotation_range=20,  # Randomly rotate images
+    width_shift_range=0.2,  # Randomly shift images horizontally
+    height_shift_range=0.2,  # Randomly shift images vertically
+    shear_range=0.2,  # Shear transformations
+    zoom_range=0.2,  # Randomly zoom images
+    horizontal_flip=True,  # Randomly flip images horizontally
+    validation_split=0.2,  # Split 20% of data for validation
+)
+
+# Training Data
+train_generator = train_datagen.flow_from_directory(
+    dataset_dir,
+    target_size=(img_height, img_width),
+    batch_size=batch_size,
+    class_mode="categorical",  # For multi-class classification
+    subset="training",  # Use training subset
+)
+
+# Validation Data
+validation_generator = train_datagen.flow_from_directory(
+    dataset_dir,
+    target_size=(img_height, img_width),
+    batch_size=batch_size,
+    class_mode="categorical",  # For multi-class classification
+    subset="validation",  # Use validation subset
+)
+
+# Step 2: Build the CNN Model
+model = models.Sequential([
+    layers.Conv2D(32, (3, 3), activation="relu", input_shape=(img_height, img_width, 3)),
+    layers.MaxPooling2D((2, 2)),
+    layers.Conv2D(64, (3, 3), activation="relu"),
+    layers.MaxPooling2D((2, 2)),
+    layers.Conv2D(128, (3, 3), activation="relu"),
+    layers.MaxPooling2D((2, 2)),
+    layers.Flatten(),
+    layers.Dense(128, activation="relu"),
+    layers.Dropout(0.5),  # Dropout to prevent overfitting
+    layers.Dense(train_generator.num_classes, activation="softmax"),  # Output layer
+])
+
+# Compile the Model
+model.compile(
+    optimizer="adam",
+    loss="categorical_crossentropy",  # For multi-class classification
+    metrics=["accuracy"],
+)
+
+# Step 3: Train the Model
+epochs = 10
+history = model.fit(
+    train_generator,
+    steps_per_epoch=train_generator.samples // batch_size,
+    validation_data=validation_generator,
+    validation_steps=validation_generator.samples // batch_size,
+    epochs=epochs,
+)
+
+# Step 4: Evaluate the Model
+# Plot training and validation accuracy
+plt.plot(history.history["accuracy"], label="Training Accuracy")
+plt.plot(history.history["val_accuracy"], label="Validation Accuracy")
+plt.title("Training and Validation Accuracy")
+plt.xlabel("Epoch")
+plt.ylabel("Accuracy")
+plt.legend()
+plt.show()
+
+# Step 5: Save the Model
+model.save("lost_and_found_model.h5")
+print("Model saved as lost_and_found_model.h5")
+
+# Step 6: Use the Model for Predictions
+def predict_item(image_path):
+    # Load the saved model
+    model = tf.keras.models.load_model("lost_and_found_model.h5")
+
+    # Load and preprocess the image
+    img = tf.keras.preprocessing.image.load_img(
+        image_path, target_size=(img_height, img_width)
+    )
+    img_array = tf.keras.preprocessing.image.img_to_array(img)
+    img_array = img_array / 255.0  # Normalize pixel values
+    img_array = tf.expand_dims(img_array, 0)  # Add batch dimension
+
+    # Make a prediction
+    predictions = model.predict(img_array)
+    predicted_class = tf.argmax(predictions, axis=1).numpy()[0]
+    class_labels = list(train_generator.class_indices.keys())
+    return class_labels[predicted_class]
+
+# Example Usage
+image_path = "test_image.jpg"  # Path to the image you want to predict
+predicted_item = predict_item(image_path)
+print(f"The predicted item is: {predicted_item}")
